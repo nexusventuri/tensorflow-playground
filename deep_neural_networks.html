@@ -30,11 +30,12 @@ console.log(text)
   iframe.id = 'context';
   document.body.appendChild(iframe);
   let context = iframe.contentDocument;
-  //let context = document.getElementById('context').contentDocument;
   context.write('');
+  context.close();
 
   let customEval = function(code) {
     context.write("<script>" + code + "<\/script>");
+    context.close();
   }
 
 
