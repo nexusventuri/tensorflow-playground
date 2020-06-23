@@ -26,18 +26,6 @@ console.log(text)
   ace.require("ace/keybindings/vim");
 
   const editorDomElements = document.querySelectorAll('.ace-editor');
-  var iframe = document.createElement('iframe');
-  iframe.id = 'context';
-  document.body.appendChild(iframe);
-  let context = iframe.contentDocument;
-  context.write('');
-  context.close();
-
-  let customEval = function(code) {
-    context.write("<script>" + code + "<\/script>");
-    context.close();
-  }
-
 
   let editors = {};
 
@@ -54,7 +42,7 @@ console.log(text)
       exec: function(editor) {
         let code = editor.getValue();
         //code = code.replace(/\b(let|const)\b/, 'var');
-        customEval(code);
+        eval(code);
       }
     });
     editors[id] = editor;
