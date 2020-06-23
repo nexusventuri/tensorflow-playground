@@ -1,0 +1,62 @@
+---
+layout: default
+---
+<h1 class='title'>Deep neural networks</h1>
+<p>Playing around with tensorflow, and playing around </p>
+<div style='position: relative; height: 400px;'>
+  <div id='d-setup' class='ace-editor' style='height: 100%; width: 100%'>
+// press ctrl+enter to execute the code
+let text = 'my text'
+function foo(text) {
+  console.log(text)
+}
+foo(text)
+  </div>
+</div>
+<hr />
+
+<div style='position: relative; height: 400px;'>
+  <div id='d2-setup' class='ace-editor' style='height: 100%; width: 100%'>
+console.log('second editor')
+console.log(text)
+  </div>
+</div>
+<script src='js/ace/ace.js'></script>
+<script>
+  ace.require("ace/keybindings/vim");
+
+  const editorDomElements = document.querySelectorAll('.ace-editor');
+  var iframe = document.createElement('iframe');
+  iframe.id = 'context';
+  document.body.appendChild(iframe);
+  let context = iframe.contentDocument;
+  //let context = document.getElementById('context').contentDocument;
+  context.write('');
+
+  let customEval = function(code) {
+    context.write("<script>" + code + "<\/script>");
+  }
+
+
+  let editors = {};
+
+  editorDomElements.forEach((dom) => {
+    let id = dom.id;
+    let editor = ace.edit(id);
+    editor.setTheme('ace/theme/dracula')
+    editor.session.setMode("ace/mode/javascript");
+    editor.setKeyboardHandler("ace/keyboard/vim");
+    editor.setFontSize('20px');
+    editor.commands.addCommand({
+      name: 'Execute',
+      bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},
+      exec: function(editor) {
+        let code = editor.getValue();
+        //code = code.replace(/\b(let|const)\b/, 'var');
+        customEval(code);
+      }
+    });
+    editors[id] = editor;
+  })
+</script>
+
