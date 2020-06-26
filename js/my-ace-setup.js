@@ -2,6 +2,14 @@ ace.require("ace/keybindings/vim");
 
 const editorDomElements = document.querySelectorAll('.ace-editor');
 
+function esm(templateStrings, ...substitutions) {
+  let js = templateStrings.raw[0];
+  for (let i=0; i<substitutions.length; i++) {
+    js += substitutions[i] + templateStrings.raw[i+1];
+  }
+  return 'data:text/javascript;base64,' + btoa(js);
+}
+
 let editors = {};
 
 editorDomElements.forEach((dom) => {
@@ -18,6 +26,10 @@ editorDomElements.forEach((dom) => {
       let code = editor.getValue();
       //code = code.replace(/\b(let|const)\b/, 'var');
       eval(code);
+      //console.log('going to execute', code);
+      //let executable = esm`${code}`;
+      //import(executable)
+      //  .then(running => console.log('running the thing', running));
     }
   });
   editors[id] = editor;
