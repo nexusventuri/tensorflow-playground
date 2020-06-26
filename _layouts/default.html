@@ -10,10 +10,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
 
 {% if page.head_include %}
-  {% include {{ page.head_include }} %}
+{% include {{ page.head_include }} %}
 {% endif %}
 </head>
 <body>
+<nav class="navbar is-fixed-top">
+  <div class="navbar-end">
+    <div class='container'>
+      <div class="field">
+        <div class="control">
+          <div class="select">
+            <select id='editor'>
+              <option>Editor</option>
+              <option value='vim'>Vim</option>
+              <option value='emacs'>Emacs</option>
+              <option value='sublime'>Sublime</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
 <section class="section">
   <div class="tabs is-centered">
     <ul>

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bundle exec jekyll serve
+bundle exec jekyll serve --trace
 
 if [[ "$?" != "0" ]]; then
   echo "Please run"
