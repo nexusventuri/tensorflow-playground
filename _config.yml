@@ -1,0 +1,6 @@
+title: Tensorflow Playground
+description: >- # this means to ignore newlines until "baseurl:"
+  Experimenting with tensorflow js. 
+  The aim of those pages is to prepare an internal presentation in carwow to display the differences between a plain neural network and cnn.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com

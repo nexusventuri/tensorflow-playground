@@ -16,7 +16,7 @@ The goal of this github page is to support a presentation I'll do internally at 
 
 window.data = null;
 console.time('Loading the data')
-import('/js/mnist-data.js').then(async ({MnistData}) => {
+import('./js/mnist-data.js').then(async ({MnistData}) => {
   console.log('lala');
 
   async function showExamples(data) {
@@ -230,7 +230,7 @@ console.log('Confusion calculation ended');
   </div>
 </div>
 
-<script type="module" src='/js/mnist-data.js'></script>
-<script src='/js/ace/ace.js'></script>
-<script src='/js/my-ace-setup.js'></script>
+<script type="module" src='js/mnist-data.js'></script>
+<script src='js/ace/ace.js'></script>
+<script src='js/my-ace-setup.js'></script>
 
