@@ -16,7 +16,7 @@ The goal of this github page is to support a presentation I'll do internally at 
 
 window.data = null;
 console.time('Loading the data')
-import('./js/mnist-data.js').then(async ({MnistData}) => {
+import(`${window.location}/../js/mnist-data.js`).then(async ({MnistData}) => {
   console.log('lala');
 
   async function showExamples(data) {
