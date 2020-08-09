@@ -1,54 +1,68 @@
 ace.require("ace/keybindings/vim");
 
-const editorDomElements = document.querySelectorAll('.ace-editor');
+class Editor {
+  constructor(id) {
+    this.id = id;
+    this.editor = ace.edit(this.id);
+    this.runButton = this.id + '-submit';
 
-function esm(templateStrings, ...substitutions) {
-  let js = templateStrings.raw[0];
-  for (let i=0; i<substitutions.length; i++) {
-    js += substitutions[i] + templateStrings.raw[i+1];
+    this.setKeyboardHandler('vim');
+    this.setDefaultEditorSettings();
+    Editor.addEditor(this);
   }
-  return 'data:text/javascript;base64,' + btoa(js);
+
+  setDefaultEditorSettings() {
+    this.editor.setTheme('ace/theme/dracula')
+    this.editor.session.setMode("ace/mode/javascript");
+    this.editor.setFontSize('20px');
+    this.editor.commands.addCommand({
+      name: 'Execute',
+      bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},
+      exec: (editor) => { this.executeCode() }
+    });
+  }
+
+  setKeyboardHandler(editorName) {
+    this.editor.setKeyboardHandler(Editor.getEditorHandler(editorName));
+    this.setDefaultEditorSettings();
+  }
+
+  executeCode() {
+    let code = this.editor.getValue();
+    eval(code);
+  }
+
+  static handlers =  {
+    'vim': 'ace/keyboard/vim',
+    'emacs': 'ace/keyboard/emacs',
+    'sublime': 'ace/keyboard/sublime'
+  };
+
+  static getEditorHandler(key) {
+    return this.handlers[key] || this.handlers['vim'];
+  }
+
+  static editors = {};
+  static addEditor(editor) {
+    editors[editor.id] = editor;
+  }
+
+  static applyToAll(fun) {
+    for (const [key, editor] of Object.entries(editors)) {
+      fun(editor)
+    }
+  }
 }
 
+const editorDomElements = document.querySelectorAll('.ace-editor');
 let editors = {};
 
 editorDomElements.forEach((dom) => {
-  let id = dom.id;
-  let editor = ace.edit(id);
-  editor.setTheme('ace/theme/dracula')
-  editor.session.setMode("ace/mode/javascript");
-  editor.setKeyboardHandler("ace/keyboard/vim");
-  editor.setFontSize('20px');
-  editor.commands.addCommand({
-    name: 'Execute',
-    bindKey: {win: 'Ctrl-Enter',  mac: 'Command-Enter'},
-    exec: function(editor) {
-      let code = editor.getValue();
-      //code = code.replace(/\b(let|const)\b/, 'var');
-      eval(code);
-      //console.log('going to execute', code);
-      //let executable = esm`${code}`;
-      //import(executable)
-      //  .then(running => console.log('running the thing', running));
-    }
-  });
-  editors[id] = editor;
+  editors[dom.id] = new Editor(dom.id);
 })
 
 let editorSelection = document.getElementById('editor');
-
-let editorKeyboardHandlers = {
-  'vim': 'ace/keyboard/vim',
-  'emacs': 'ace/keyboard/emacs',
-  'sublime': 'ace/keyboard/sublime'
-}
-
 editorSelection.onchange = function (event) {
-  let editorHandler = editorKeyboardHandlers[event.target.selectedOptions[0].value] ||
-    editorKeyboardHandlers['vim'];
-
-  for (const [key, value] of Object.entries(editors)) {
-    value.setKeyboardHandler(editorHandler);
-  }
+  Editor.applyToAll((editor) => editor.setKeyboardHandler(event.target.selectedOptions[0].value));
 };
 
